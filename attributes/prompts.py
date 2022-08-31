@@ -1,4 +1,9 @@
 import random
+import os
+import openai
+
+env_openai_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = env_openai_key
 
 character_list = ["Marilyn Monroe", "Abraham Lincoln", "Nelson Mandela", "John F. Kennedy", "Martin Luther King",
                   "Queen Elizabeth II", "Winston Churchill", "Donald Trump", "Bill Gates", "Muhammad Ali",
@@ -48,14 +53,33 @@ places_list = ["on a mountain", "on a plane", "on a bike", "on a cruise", "on an
 prompt_list = ["Donald Trump on a bike", "Keanu Reeves writing a letter", "Sunflowers in the rain", "Huge soccer match"]
 
 
-def composePrompt():
+def compose_prompt():
     prompt_string = random.choice(character_list) + " " + random.choice(action_list) + " " + random.choice(places_list)
     return prompt_string
+
+
+def compose_prompt_ai():
+    response = openai.Completion.create(
+        model="text-davinci-002",
+        prompt="Create a paragraph from this prompt: A highly detailed description of" + random.choice(character_list) +
+               " in a place doing something",
+        temperature=0.8,
+        max_tokens=45,
+        top_p=1.0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0
+    )
+
+    split_list = str(response.choices[0]["text"]).strip().split(".")[:-1]
+    return str('. '.join(split_list))
 
 
 def get_prompt(number=1):
     prompt_string = ""
     while number > 0:
-        prompt_string = prompt_string + "\"" + composePrompt() + "\", "
+        if env_openai_key is not None:
+            prompt_string = prompt_string + "\"" + compose_prompt_ai() + "\", "
+        else:
+            prompt_string = prompt_string + "\"" + compose_prompt() + "\", "
         number -= 1
     return prompt_string
