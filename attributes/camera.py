@@ -8,4 +8,4 @@ camera_list = ["super-resolution", "microscopy", "microscopy", "macro lens", "pi
 
 
 def get_camera():
-    return "::" + random.choice(camera_list) + "::, "
+    return random.choice(camera_list)

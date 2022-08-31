@@ -15,6 +15,6 @@ lighting_list= ["bright lighting", "campfire lighting", "candlelight", "cinemati
 def get_lighting(number=1):
     lighting_string = ""
     while number > 0:
-        lighting_string = lighting_string + "::" + random.choice(lighting_list) + "::, "
+        lighting_string = lighting_string + random.choice(lighting_list)
         number -= 1
     return lighting_string
