@@ -1,5 +1,6 @@
+#!/usr/bin/env python
+import os
 import PySimpleGUI as sg
-
 from attributes import artist, aspect_ratio, prompts, art_media, lighting, descriptors, camera
 
 form = sg.FlexForm('Midjourney Randomizer')
@@ -14,10 +15,10 @@ layout = [
     [sg.Checkbox("art media: ", size=15, default=True, k="include-am"),
      sg.Combo(art_media.art_media_list, size=40, k="am-text"),
      sg.InputText(size=5, k="am-count")],
-    [sg.Checkbox("lighting: ", size=15, default=True, k="include-lighting"),
-     sg.Combo(camera.camera_list, size=40, k="lighting-text"), sg.InputText(size=5, k="lighting-count")],
     [sg.Checkbox("descriptors: ", size=15, default=True, k="include-descriptor"),
      sg.Combo(descriptors.descriptors_list, size=40, k="descriptor-text"), sg.InputText(size=5, k="descriptor-count")],
+    [sg.Checkbox("lighting: ", size=15, default=True, k="include-lighting"),
+     sg.Combo(camera.camera_list, size=40, k="lighting-text"), sg.InputText(size=5, k="lighting-count")],
     [sg.Checkbox("aspect ratio: ", size=15, default=True, k="include-ar"),
      sg.Combo(aspect_ratio.aspect_ratio_list, size=40, k="ar-text")],
     [sg.Checkbox("camera: ", size=15, default=True, k="include-camera"),
@@ -112,12 +113,12 @@ while True:
         prompt = prompt + artist_text
     if include_am:
         prompt = prompt + am_text
+    if include_descriptor:
+        prompt = prompt + descriptor_text
     if include_camera:
         prompt = prompt + camera_text
     if include_lighting:
         prompt = prompt + lighting_text
-    if include_descriptor:
-        prompt = prompt + descriptor_text
     if include_ar:
         prompt = prompt + ar_text
     if include_test:
@@ -125,6 +126,7 @@ while True:
     if include_testp:
         prompt = prompt + "--testp"
 
+    print(os.getenv("OPENAI_API_KEY1"))
     prompt = prompt.strip()
     window['output'].update(value=prompt)
 
